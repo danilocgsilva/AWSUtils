@@ -29,5 +29,17 @@ class AWSUtils:
             region_names.append(region_name["RegionName"])
         return region_names
 
-    def __choose_between_keypairs(self, keypairs_result):
-        raise Exception("Still not implemented.")
+    def __choose_between_keypairs(self, keypairs_result) -> str:
+        cleaned_keypairs_name_results = []
+        key_pair_message_part = ""
+        for singlekey in keypairs_result:
+            singleKeyName = singlekey["KeyName"]
+            cleaned_keypairs_name_results.append(singleKeyName)
+            key_pair_message_part += " * " + singleKeyName + "\n"
+        choosing_message = "It was found several keypairs on your account:\n"
+        choosing_message += key_pair_message_part
+        choosing_message += "Choose one, typing the name: "
+        choosed_message = input(choosing_message)
+        if not choosed_message in cleaned_keypairs_name_results:
+            raise Exception("You provided an invalid message.")
+        return choosed_message
